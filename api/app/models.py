@@ -16,6 +16,10 @@ class User(AbstractUser):
     def add_score(self, amount):
         self.score += amount
         return self.score
+
+    def set_score(self, amount):
+        self.score = amount
+        return self.score
     
     def get_access_code(self):
         return self.access_code
