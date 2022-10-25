@@ -137,36 +137,15 @@ class QuestionResponseAPI(viewsets.ModelViewSet):
         sortedQuery = query.order_by('questionId_id')
         print(sortedQuery)
 
-        # print(f'Username: {user.get_username()}')
-        # print(f'Score: {100.0 * user.score/sortedQuery.count()}%')
-
         n = f'Username: {user.get_username()}'
         s = f'Score: {100.0 * user.score/sortedQuery.count()}%'
-
         s3 = ""
 
         for i in sortedQuery:
             s3 = '\n'.join([s3,f"Question {i.questionId.id} : {i.candidateAnswer}"])
-        # print("original")
-        # for i in query:
-        #     print(f"question {i.questionId.id} : {i.candidateAnswer}" )
 
         s4 = '\n'.join([n, s, s3])
         print(s4)
         
         return Response(serializer.data)
     
-
-
-
-
-
-
-
-# class ChoiceList(generics.ListCreateAPIView):
-#     queryset = QuestionChoices.objects.all()
-#     serializer_class = ChoiceSerializer
-
-# class ChoiceDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = QuestionChoices.objects.all()
-#     serializer_class = ChoiceSerializer
