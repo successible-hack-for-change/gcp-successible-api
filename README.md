@@ -22,3 +22,63 @@ python3 manage.py migrate app
 python3 manage.py migrate   
 
 python3 manage.py runserver 
+
+
+Endpoints - details of the APIs
+
+Questions API
+
+Return all questions
+GET http://127.0.0.1:8000/ 
+
+POST http://127.0.0.1:8000/
+{
+    "question": "Example question",
+    "answer": "A",
+    "resA": "3",
+    "resB": "4",
+    "resC": "5",
+    "resD": "6",
+    "highlight": "7",
+    "image": "8",
+    "timeLimit": 120,
+    "definitions": "defn"
+}
+
+Users API
+
+List of all Users
+GET http://127.0.0.1:8000/users
+
+Create user
+POST http://127.0.0.1:8000/users
+{
+    "username" : "a",
+    "email" : "a@email.com"
+}
+
+View User Details
+GET http://127.0.0.1:8000/user/<int:pk>
+
+Question Responses API
+
+To submit a response from the user
+POST http://127.0.0.1:8000/user/<int:pk>/postresponse
+{
+    "user" : 1,
+    "questionId" : 5,
+    "candidateAnswer" : "A"
+}
+
+When the test finishes - this submits the form and calculates the score, where 1 is <int:pk>
+GET http://127.0.0.1:8000/user/1/postresponse
+
+Notes
+
+In case:
+to retrieve userID by username
+
+POST http://127.0.0.1:8000/getuser
+{
+    "username" : "a"
+}
