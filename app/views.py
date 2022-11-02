@@ -107,7 +107,7 @@ class QuestionResponseAPI(viewsets.ModelViewSet):
         reqQuestion = request.data['questionId']
         reqCandidateAnswer = request.data['candidateAnswer']
 
-        if QuestionResponse.objects.filter(questionId=reqQuestion).filter(user=reqUser).count() is 0:
+        if QuestionResponse.objects.filter(questionId=reqQuestion).filter(user=reqUser).count() == 0:
             print("QuestionResponse does not exist in db, question was not answered by user before")
             if self.check_result(reqQuestion, reqCandidateAnswer):
                 request.data['correct'] = True
@@ -127,7 +127,8 @@ class QuestionResponseAPI(viewsets.ModelViewSet):
         query = QuestionResponse.objects.filter(user=pk)
 
         correctAnswers = query.filter(correct=True).count()
-        user = User.objects.get(pk=pk)
+        print(pk)
+        user = User.objects.get(id=pk)
         user.score = user.set_score(correctAnswers)
         userSerial = UserSerializer(user, data={"score": user.score}, partial=True)
         if userSerial.is_valid():
