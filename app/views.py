@@ -108,14 +108,15 @@ class QuestionResponseAPI(viewsets.ModelViewSet):
         reqCandidateAnswer = request.data['candidateAnswer']
 
         if QuestionResponse.objects.filter(questionId=reqQuestion).filter(user=reqUser).count() is 0:
-            print("doesnt exist in db")
+            print("QuestionResponse does not exist in db, question was not answered by user before")
             if self.check_result(reqQuestion, reqCandidateAnswer):
                 request.data['correct'] = True
             serializer = QuestionResponseSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
+                print("QuestionResponseSerializer is valid and saved")
                 return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else: return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         self.check_result(reqQuestion, reqCandidateAnswer)
         return Response("Error 412: a response for this question has already been received. Please check and try again", status=status.HTTP_412_PRECONDITION_FAILED)
 
