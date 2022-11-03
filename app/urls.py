@@ -15,9 +15,9 @@ user_response = views.QuestionResponseAPI.as_view({
     'get': 'get_score_sheet'
 })
 
-# user_score_sheet = views.QuestionResponsePost.as_view({
-#     'get': 
-# })
+custom_question_list = views.CustomQuestionList.as_view({
+    'get': 'get_question_list',
+})
 
 urlpatterns = [
     path('', views.QuestionList.as_view()),
@@ -29,6 +29,7 @@ urlpatterns = [
     path('user/<int:pk>/response/<int:pk_2>', views.QuestionResponseDetail.as_view()),
     path('getuser', user_utils),
     path('user/<int:pk>/postresponse', user_response),
+    path('questions', custom_question_list),
 
     # path('choices/', views.ChoiceList.as_view()),
     # path('choices/<int:pk>/', views.ChoiceDetail.as_view()),

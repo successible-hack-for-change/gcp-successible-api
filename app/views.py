@@ -19,6 +19,22 @@ class QuestionList(generics.ListCreateAPIView):
 class QuestionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
+    
+class CustomQuestionList(viewsets.ModelViewSet):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+    
+    @action(detail=True, methods=['get'])
+    def get_question_list(self, request, format=None, *args, **kwargs):
+        
+        accessCode = request.headers.get("Access-Code")
+        if accessCode == "test" or accessCode == "demo" or accessCode == "nKNjpC4P" or accessCode == "9k8ZE6g8":
+            query = Question.objects.all()
+            serializer = QuestionSerializer(query, many=True )
+            return Response(serializer.data)
+        return Response("Please check users access code",status=status.HTTP_404_NOT_FOUND )
+        
+        
 
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
@@ -39,7 +55,7 @@ class UserDetailUtils(viewsets.ModelViewSet):
             raise Http404
 
     @action(detail=True, methods=['post'])
-    def get_user_id(self, request, format=None, *args, **kwargs, ):
+    def get_user_id(self, request, format=None, *args, **kwargs):
     
         username_req = request.data["username"]
         user_info = User.objects.get(username=username_req)
