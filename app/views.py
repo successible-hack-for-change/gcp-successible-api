@@ -87,12 +87,6 @@ class QuestionResponseDetail(generics.RetrieveUpdateDestroyAPIView):
 class QuestionResponseAPI(viewsets.ModelViewSet):
     queryset = QuestionResponse.objects.all()
     serializer_class = QuestionResponseSerializer
-    
-    def get_user(self, pk):
-        try:
-            return User.objects.get(id=pk)
-        except User.DoesNotExist:
-            raise Http404
 
     def check_result(self, questionId, candidateAnswer):
         print("questionId is " + str(questionId))
@@ -114,9 +108,8 @@ class QuestionResponseAPI(viewsets.ModelViewSet):
         reqCandidateAnswer = request.data['candidateAnswer']
         
         pk = self.kwargs.get('pk')
-        checkUser = self.get_user(pk)
         
-        if reqUser != checkUser:
+        if reqUser != pk:
             return Response("User id and pk mismatch, please check and try again",status=status.HTTP_400_BAD_REQUEST)
 
         if QuestionResponse.objects.filter(questionId=reqQuestion).filter(user=reqUser).count() == 0:
