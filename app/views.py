@@ -34,7 +34,7 @@ class UserDetailUtils(viewsets.ModelViewSet):
 
     def get_user(self, pk):
         try:
-            return User.objects.get(pk=pk)
+            return User.objects.get(id=pk)
         except User.DoesNotExist:
             raise Http404
 
@@ -57,7 +57,7 @@ class UserDetailScore(viewsets.ModelViewSet):
 
     def get_user(self, pk):
         try:
-            return User.objects.get(pk=pk)
+            return User.objects.get(id=pk)
         except User.DoesNotExist:
             raise Http404
 
@@ -87,6 +87,12 @@ class QuestionResponseDetail(generics.RetrieveUpdateDestroyAPIView):
 class QuestionResponseAPI(viewsets.ModelViewSet):
     queryset = QuestionResponse.objects.all()
     serializer_class = QuestionResponseSerializer
+    
+    def get_user(self, pk):
+        try:
+            return User.objects.get(id=pk)
+        except User.DoesNotExist:
+            raise Http404
 
     def check_result(self, questionId, candidateAnswer):
         print("questionId is " + str(questionId))
@@ -106,6 +112,12 @@ class QuestionResponseAPI(viewsets.ModelViewSet):
         reqUser = request.data['user']
         reqQuestion = request.data['questionId']
         reqCandidateAnswer = request.data['candidateAnswer']
+        
+        pk = self.kwargs.get('pk')
+        checkUser = self.get_user(pk)
+        
+        if reqUser != checkUser:
+            return Response("User id and pk mismatch, please check and try again",status=status.HTTP_400_BAD_REQUEST)
 
         if QuestionResponse.objects.filter(questionId=reqQuestion).filter(user=reqUser).count() == 0:
             print("QuestionResponse does not exist in db, question was not answered by user before")
@@ -139,15 +151,18 @@ class QuestionResponseAPI(viewsets.ModelViewSet):
         sortedQuery = query.order_by('questionId_id')
         print(sortedQuery)
 
-        n = f'Username: {user.get_username()}'
-        s = f'Score: {100.0 * user.score/sortedQuery.count()}%'
-        s3 = ""
+        if sortedQuery.count() != 0:
+            n = f'Username: {user.get_username()}'
+            s = f'Score: {100.0 * user.score/sortedQuery.count()}%'
+            s3 = ""
 
-        for i in sortedQuery:
-            s3 = '\n'.join([s3,f"Question {i.questionId.id} : {i.candidateAnswer}"])
+            for i in sortedQuery:
+                s3 = '\n'.join([s3,f"Question {i.questionId.id} : {i.candidateAnswer}"])
 
-        s4 = '\n'.join([n, s, s3])
-        print(s4)
-        
-        return Response(serializer.data)
+            s4 = '\n'.join([n, s, s3])
+            print(s4)
+            return Response(serializer.data)
+        elif sortedQuery.count() == 0:
+            return Response("Sorry an error has occurred, please check responses have been submitted or try again later", status=status.HTTP_412_PRECONDITION_FAILED)
+        return Response("Sorry an error has occurred, please try again later", status=HTTP_500_INTERNAL_SERVER_ERROR)
     
