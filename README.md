@@ -1,5 +1,7 @@
 # Successible-Api
 
+python version 3.10.4
+
 For windows to activate env
 1. Go into the Successible-Api repo then run commands
 py -m venv env
@@ -8,12 +10,12 @@ env\Scripts\activate
 2. py -m pip install -r requirements.txt 
 
 For mac
-1. Go into the Successible-Api repo then run commands
+1. Go into the gcp-successible repo then run commands
 python3 -m venv env  
 source env/bin/activate
 2. python3 -m pip install -r requirements.txt 
 
-To run the app cd into the api folder and run the following commands
+To run the app run the following commands
 
 python3 manage.py makemigrations app
 python3 manage.py migrate app
