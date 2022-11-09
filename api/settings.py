@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'allauth',
     'allauth.account',
+    
     'corsheaders',
     
     'app',
@@ -141,3 +142,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ]
 
 CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOW_HEADERS = ['*']
