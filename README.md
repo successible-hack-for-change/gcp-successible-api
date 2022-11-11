@@ -7,14 +7,14 @@ This respository is for the version running on GCP and we have a different respo
 ### Pre-Requisite:
 Python 3.10.4
 
+## Endpoints - details of the APIs
 In this project we used django and django rest framework. The following describes the end points 
+
 
 
 ```
 host: successible-api-nqnaexycua-nw.a.run.app
 ```
-
-## Endpoints - details of the APIs
 
 ### Questions API
 
